@@ -5,6 +5,8 @@ import githubQuery from "./Query";
 function App() {
 
     const [name, setName] = useState(null)
+    const [repos, setRepos] = useState(null)
+
     const fetchData = useCallback(() => {
         fetch(github.baseurl, {
             method: "POST",
@@ -13,8 +15,10 @@ function App() {
         })
             .then((response) => response.json())
             .then((data) => {
-                setName(data.data.viewer.name);
-                console.log(data);
+                const viewer = data.data.viewer
+                const repos = viewer.repositories.nodes
+                setName(viewer.name);
+                setRepos(repos)
             })
             .catch((err) => {
                 console.log(err);
@@ -33,6 +37,22 @@ function App() {
             <p>
                 Hey there, {name}
             </p>
+            {
+                repos && (
+                    <ul className="list-group list-group-flush">
+                        {
+                            repos.map((repo, index) => (
+                                <li className="list-group-item" key={index}>
+                                    <a className="h5 mb-0 text-decoration-none" href={repo.url}>
+                                        {repo.name}
+                                    </a>
+                                    <p className="small">{repo.description}</p>
+                                </li>
+                            ))
+                        }
+                    </ul>
+                )
+            }
         </div>
     );
 }
