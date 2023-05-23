@@ -15,6 +15,7 @@ const githubQuery = {
             description
             id
             url
+            viewerSubscription
           }
         }
       }
