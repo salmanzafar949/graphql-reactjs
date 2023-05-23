@@ -1,18 +1,24 @@
 const githubQuery = {
     query: `
-      {
-  viewer {
-    name
-    repositories(first: 10) {
-      nodes {
+         {
+      viewer {
         name
-        description
-        url
-        id
+      }
+      search(
+        query: "user:salmanzafar949 sort:updated-desc"
+        type: REPOSITORY
+        first: 10
+      ) {
+        nodes {
+          ... on Repository {
+            name
+            description
+            id
+            url
+          }
+        }
       }
     }
-  }
-}
     `,
 };
 
