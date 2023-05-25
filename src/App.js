@@ -3,6 +3,7 @@ import {useEffect, useState, useCallback} from "react";
 import githubQuery from "./Query";
 import RepoInfo from "./RepoInfo";
 import SearchBox from "./SearchBox";
+import NavButton from "./NavButton";
 
 function App() {
 
@@ -16,7 +17,7 @@ function App() {
     const [hasPreviousPage, setHasPreviousPage] = useState(false)
     const [hasNextPage, setHasNextPage] = useState(true)
     const [paginationKeyWord, setPaginationKeyWord] = useState("first")
-    const [paginationString, sePaginationString] = useState("")
+    const [paginationString, setPaginationString] = useState("")
 
     const fetchData = useCallback(() => {
         let queryText = JSON.stringify(githubQuery(pageCount, queryString, paginationKeyWord, paginationString))
@@ -45,7 +46,7 @@ function App() {
             .catch((err) => {
                 console.log(err);
             });
-    }, [pageCount, queryString]);
+    }, [pageCount, queryString, paginationString, paginationKeyWord]);
 
     useEffect(() => {
         fetchData();
@@ -60,6 +61,16 @@ function App() {
                 Hey there, {name}
             </p>
             <SearchBox onQueryStringChange={setQueryString} queryString={queryString} onTotalChange={setPageCount} pageCount={pageCount} totalCount={totalCount}/>
+            <NavButton
+                start={startCursor}
+                end={endCursor}
+                next={hasNextPage}
+                previous={hasPreviousPage}
+                onPage={(myKeyword, myString) => {
+                    setPaginationKeyWord(myKeyword);
+                    setPaginationString(myString);
+                }}
+            />
             {
                 repos && (
                     <ul className="list-group list-group-flush">
@@ -69,6 +80,16 @@ function App() {
                     </ul>
                 )
             }
+            <NavButton
+                start={startCursor}
+                end={endCursor}
+                next={hasNextPage}
+                previous={hasPreviousPage}
+                onPage={(myKeyword, myString) => {
+                    setPaginationKeyWord(myKeyword);
+                    setPaginationString(myString);
+                }}
+            />
         </div>
     );
 }
