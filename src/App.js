@@ -2,13 +2,14 @@ import github from "./db";
 import {useEffect, useState, useCallback} from "react";
 import githubQuery from "./Query";
 import RepoInfo from "./RepoInfo";
+import SearchBox from "./SearchBox";
 
 function App() {
 
     const [name, setName] = useState(null)
     const [repos, setRepos] = useState(null)
     const [pageCount, setPageCount] = useState(10)
-    const [queryString, setQueryString] = useState("laravel")
+    const [queryString, setQueryString] = useState("")
     const [totalCount, setTotalCount] = useState(0)
 
     const fetchData = useCallback(() => {
@@ -45,9 +46,7 @@ function App() {
             <p>
                 Hey there, {name}
             </p>
-            <p>
-                <b>Search for: </b> {queryString} | <b>Items per page: </b> {pageCount} | <b>Total results: </b> {totalCount}
-            </p>
+            <SearchBox onQueryStringChange={setQueryString} queryString={queryString} onTotalChange={setPageCount} pageCount={pageCount} totalCount={totalCount}/>
             {
                 repos && (
                     <ul className="list-group list-group-flush">
